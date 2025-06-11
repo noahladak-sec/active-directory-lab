@@ -149,6 +149,15 @@ index=main EventCode=4720
 
 ---
 
+##  Summary of Scripts & Configurations
+
+| Script/File          | Purpose                            |
+|----------------------|------------------------------------|
+| configureADLab.ps1   | Set up AD DS, DNS, DHCP            |
+| create-users.ps1     | Bulk user creation                 |
+| inputs.conf          | Splunk Forwarder config            |
+| atomic-red-install.ps1 | Atomic Red Team script installer |
+
 
 
 
