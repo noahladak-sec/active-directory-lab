@@ -12,6 +12,12 @@ The goal: **to understand how enterprise networks operate and how to detect susp
 
 ---
 
+## 🗺️ Lab Architecture
+
+![Active Directory Lab Diagram](images/architecture-diagram.png)
+
+---
+
 ##  Tools & Technologies Used
 - VirtualBox (VM environment)
 - Windows Server 2022 (Domain Controller)
@@ -157,6 +163,7 @@ index=main EventCode=4720
 | create-users.ps1     | Bulk user creation                 |
 | inputs.conf          | Splunk Forwarder config            |
 | atomic-red-install.ps1 | Atomic Red Team script installer |
+
 
 
 
