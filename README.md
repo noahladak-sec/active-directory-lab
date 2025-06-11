@@ -14,7 +14,7 @@ The goal: **to understand how enterprise networks operate and how to detect susp
 
 ## 🗺️ Lab Architecture
 
-![Active Directory Lab Diagram](images/architecture-diagram.png)
+![Active Directory Lab Diagram](images/architecture_diagram.png)
 
 ---
 
