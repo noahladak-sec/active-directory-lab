@@ -164,6 +164,14 @@ index=main EventCode=4720
 | inputs.conf          | Splunk Forwarder config            |
 | atomic-red-install.ps1 | Atomic Red Team script installer |
 
+---
+
+## References
+
+- [Active Directory Lab Setup - YouTube Series](https://www.youtube.com/watch?v=5OessbOgyEo&t=25s)  
+- [Splunk Documentation](https://docs.splunk.com/Documentation)  
+- [Sysmon Config by SwiftOnSecurity](https://github.com/SwiftOnSecurity/sysmon-config)
+
 
 
 
