@@ -62,39 +62,42 @@ The goal: **to understand how enterprise networks operate and how to detect susp
 
 ### 3. Create Users in AD
 
-- Run the PowerShell script `create-users.ps1` to bulk-create 1,000 users in a specific Organizational Unit (OU):
+Run the PowerShell script `create-users.ps1` to bulk-create 1,000 users in a specific Organizational Unit (OU):
+
 ```powershell
 .\create-users.ps1 -InputFile names.txt -OU "OU=_ADMINS,DC=adproject,DC=local"
-
+```
 ---
 
 ### 4. Configure Windows 10 Client
-
 - Set the IP and DNS of the client to point to the Domain Controller.
-- Rename the client to "CLIENT"
+- Rename the client to CLIENT.
 - Join the domain:
-    DOMAIN: adproject.local
-- Log in using one of the domain users (eg., jsparrow)
+  - adproject.local
+- Log in using one of the domain users (e.g., jsparrow).
 
 ---
 
 ### 5. Install and Configure Splunk
+**On the Ubuntu Splunk Server:**
+- Download and install Splunk:
 
-- On the Ubuntu Splunk Server:
-  - Download and install Splunk:
+```bash
+wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5-xxxxxxx.deb"
+sudo dpkg -i splunk.deb
+sudo /opt/splunk/bin/splunk start --accept-license
+```
 
-      wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5-xxxxxxx.deb"
-      sudo dpkg -i splunk.deb
-      sudo /opt/splunk/bin/splunk start --accept-license
 
-- On DC and Client:
-  - Configure inputs.conf to forward logs:
+**On DC and Client:**
+- Configure inputs.conf to forward logs:
 
-    [default]
-    host = CLIENT
-    [WinEventLog://Security]
-    disabled = 0
-
+```
+[default]
+host = CLIENT
+[WinEventLog://Security]
+disabled = 0
+```
 ---
 
 ##  Simulated Attacks
@@ -102,41 +105,47 @@ The goal: **to understand how enterprise networks operate and how to detect susp
 ### 1. Brute Force (From Kali)
 
 - Use Hydra or Crowbar to brute-force RDP logins:
-
-    hydra -l jsparrow -P passwords.txt rdp://192.168.10.100   ***HYDRA
-                                OR
-    crowbar -b rdp -u jsparrow -C passwords.txt -s 192.168.10.100 *** CROWBAR
+**Using Hydra:**
+  
+```bash
+hydra -l jsparrow -P passwords.txt rdp://192.168.10.100
+```
+**Using Crowbar:**
+```bash
+crowbar -b rdp -u jsparrow -C passwords.txt -s 192.168.10.100
+```
 
 ---
 
 ### 2. Atomic Red Team (From Windows Client)
 
-- Install and run Atomic Red Team tests:
-
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    IEX (IWR -UseBasicParsing -Uri 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/main/install-      atomicredteam.ps1')
-    Install-AtomicRedTeam
-    Invoke-AtomicTest T1136.001
-
-- **^T1136.001 simulates local account creation — a common attacker technique.
+Install and run Atomic Red Team tests:
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+IEX (IWR -UseBasicParsing -Uri 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/main/install-     atomicredteam.ps1')
+Install-AtomicRedTeam
+Invoke-AtomicTest T1136.001
+```
+- **T1136.001 simulates local account creation — a common attacker technique.**
 
 ---
 
 ## Monitoring & Detection in Splunk
 
 ### Detect Brute-Force Attacks
-
-- Search for Event ID 4625 (failed logons):
-
-  index=main EventCode=4625
+Search for Event ID 4625 (failed logons):
+```spl
+index=main EventCode=4625
+```
 
 ---
 
 ### Detect Local Account Creation
+Search for Event ID 4720 (new local user created):
 
-- Search for Event ID 4720 (new local user created):
-
-  index=main EventCode=4720
+```spl
+index=main EventCode=4720
+```
 
 ---
 
